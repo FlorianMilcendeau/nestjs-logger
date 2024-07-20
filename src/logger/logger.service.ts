@@ -9,19 +9,19 @@ export class LoggerService {
     this._context = ctx;
   }
 
-  log(message: string, meta?: any[]) {
+  log(message: string, meta?: Record<string, any>) {
     logger.info(message, { ...meta, context: this._context });
   }
 
-  error(message: string, trace: string, meta?: any[]) {
+  error(message: string, trace: string, meta?: Record<string, any>) {
     logger.error(message, { ...meta, context: this._context, trace });
   }
 
-  warn(message: string, meta?: any[]) {
+  warn(message: string, meta?: Record<string, any>) {
     logger.warn(message, { ...meta, context: this._context });
   }
 
-  debug(message: string, meta?: any[]) {
+  debug(message: string, meta?: Record<string, any>) {
     logger.debug(message, { ...meta, context: this._context });
   }
 }

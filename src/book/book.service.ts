@@ -44,12 +44,12 @@ export class BookService {
   async getBookById(id: string): Promise<Book> {
     const isValidId = mongoose.isValidObjectId(id);
     if (!isValidId) {
-      throw new ApiException('API_0002');
+      throw new ApiException('API_0002', undefined, { book_id: id });
     }
 
     const book = await this.bookModel.findById(id);
     if (!book) {
-      throw new ApiException('API_0001');
+      throw new ApiException('API_0001', undefined, { book_id: id });
     }
 
     return book;
@@ -62,7 +62,7 @@ export class BookService {
     });
 
     if (!updatedBook) {
-      throw new ApiException('API_0001');
+      throw new ApiException('API_0001', undefined, { book_id: id });
     }
 
     return updatedBook;
@@ -72,7 +72,7 @@ export class BookService {
     const deleteBook = await this.bookModel.findByIdAndDelete(id);
 
     if (!deleteBook) {
-      throw new ApiException('API_0001');
+      throw new ApiException('API_0001', undefined, { book_id: id });
     }
 
     return deleteBook;

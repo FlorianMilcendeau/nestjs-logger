@@ -1,12 +1,13 @@
 import {
   Catch,
   ArgumentsHost,
-  LoggerService,
   HttpStatus,
   HttpException,
   HttpAdapterHost,
   ExceptionFilter,
 } from '@nestjs/common';
+import { LoggerService } from 'src/logger/logger.service';
+import { CODE_ERROR } from './errors';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -23,8 +24,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const error = exception.getResponse();
 
-    const message = `${error['code']}: ${error['message']}`;
-    this.logger.error(message, exception.stack);
+    const message = this.buildMessage(error['message'], error['code']);
+    const metadata = error['metadata']
+      ? { metadata: error['metadata'] }
+      : undefined;
+
+    this.logger.error(message, exception.stack, metadata);
 
     const httpStatus =
       exception instanceof HttpException
@@ -39,5 +44,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
     };
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
+  }
+
+  buildMessage(message: string, code?: CODE_ERROR): string {
+    if (code) {
+      return `${code}: ${message}`;
+    }
+    return message;
   }
 }

@@ -43,7 +43,7 @@ export class BookController {
 
   @Get(':id')
   async getBook(@Param('id') id: string): Promise<Book> {
-    this.logger.log(`Fetching book with ID ${id}`);
+    this.logger.log(`Fetching book with ID ${id}`, { book_id: id });
 
     const book = await this.bookService.getBookById(id);
 
@@ -57,7 +57,7 @@ export class BookController {
     @Body()
     updateBook: UpdateBookDto,
   ): Promise<Book> {
-    this.logger.log(`Updating Book with ID ${id}`);
+    this.logger.log(`Updating Book with ID ${id}`, { book_id: id });
     const updatedBook = await this.bookService.updateBookById(id, updateBook);
 
     return updatedBook;
@@ -65,7 +65,7 @@ export class BookController {
 
   @Delete(':id')
   async deleteBook(@Param('id') id: string): Promise<Book> {
-    this.logger.log(`Deleting Book with ID ${id}`);
+    this.logger.log(`Deleting Book with ID ${id}`, { book_id: id });
     const deleteBook = await this.bookService.deleteBookById(id);
 
     return deleteBook;
